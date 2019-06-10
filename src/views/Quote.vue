@@ -33,7 +33,10 @@
 		 <button @click="catagorySort('all')">sort by all</button>
 		 <button @click="catagorySort('games')">sort by games</button>
 	   <button @click="catagorySort('movies')">sort by movies</button>
+		 <button @click="catagorySort('Corpse'); imBatman('https://i1.theportalwiki.net/img/3/3d/GLaDOS_escape_00_part1_nag15-1.wav');">cake?</button>	   
 		</div>
+		<p align="center" style="font-weight: bold;">sort by batman </p>
+		<img @click="catagorySort('Batman'); imBatman('http://www.moviesoundclips.net/movies1/batmanbegins/batman.mp3');" src="https://1000logos.net/wp-content/uploads/2016/10/Batman-logo.png" align="center">
 	</div>
 </template>
 
@@ -76,7 +79,14 @@ button {
 	opacity: 0.4;
 }
 button:hover {opacity: 0.9;}
-
+img {
+	text-align:center;
+	display:block;
+	margin: 10px auto;
+	width:10%;
+	height: 50px;
+	cursor: pointer;
+}
 </style>
 
 <script>
@@ -88,7 +98,8 @@ export default {
       limit: 15,
       pageNumber: 0,
       search: "",
-      current: 'all'
+      current: 'all',
+      theme: ''
     };
   },
   created: function() {
@@ -122,24 +133,31 @@ export default {
     },
     catagorySort(catagory) {
     	this.current = catagory;
+    },
+    imBatman(sound) { 
+    	 if (sound) {
+    	var audio = new Audio(sound);
+    	audio.play();
+      }
     }
   },
   computed: {
   	filteredQuotes: function() {
   		var catagory = this.current;
+  		var ok = [];
+
 
   		if (catagory === "all") {
-  			return this.quotes.filter((text) => {
+  			 return this.quotes.filter((text) => {
   				return text.quote.match(this.search);
   			});
-  		} else {
-  			this.limit = 15; 
-  			this.pageNumber = 0;
-  			return this.quotes.filter((quote) => {
-  				return quote.theme === catagory;
-  			});
-  		} 
+  		}  else {
+  			  return this.quotes.filter((quote) => {  
+  					 return quote.theme && quote.source === catagory || quote.theme === catagory;  
+  				});
+
+  			} 
+  		}	
   	}
-  }
 };
 </script>
